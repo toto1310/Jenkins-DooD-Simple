@@ -34,4 +34,14 @@ docker push ${DOCKER_ALIAS}:${JOB_NAME}
             }
         }
     }
+    post {
+        always {
+            emailext body: '''$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
+
+Check console output at $BUILD_URL to view the results.
+=========
+${BUILD_LOG, maxLines=200, escapeHtml=false}
+''', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: '$DEFAULT_RECIPIENTS'
+        }
+    }
 }
